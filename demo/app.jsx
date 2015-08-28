@@ -1,8 +1,9 @@
-/*global document:false*/
+/*eslint max-len:0 */
+/*global document:false event:false */
 import React from "react";
 import {CurvedCarousel} from "../src/index";
 
-class App extends React.Component {
+export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -91,7 +92,3 @@ class App extends React.Component {
     );
   }
 }
-
-const content = document.getElementById("content");
-
-React.render(<App/>, content);
