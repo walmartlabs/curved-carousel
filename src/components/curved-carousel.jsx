@@ -1,7 +1,7 @@
 /* eslint no-unused-lets:0 */
 /*global window, requestAnimationFrame*/
 
-import React from 'react/addons';
+import React from 'react';
 import cloneWithProps from 'react/lib/cloneWithProps';
 
 React.initializeTouchEvents(true);
