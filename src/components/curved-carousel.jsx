@@ -2,6 +2,7 @@
 /*global window, requestAnimationFrame*/
 
 import React from 'react';
+import PropTypes from 'prop-types';
 
 class CurvedCarousel extends React.Component {
   constructor(props) {
@@ -27,12 +28,14 @@ class CurvedCarousel extends React.Component {
     window.addEventListener('resize', this._setPosition);
   }
   render() {
+    const { childWidth, curve, spacing, rotation, friction, ...rest } = this.props;
+
     return (
       <div
         className="infinite-scroll"
         {...this._getMouseEvents()}
-        ref="container"
-        {...this.props}>
+        ref={node => this.container = node}
+        {...rest}>
         <div style={{ position: 'relative', height: '100%', width: '100%', overflow: 'hidden' }}>
           {this._childrenWithPositions()}
         </div>
@@ -41,7 +44,7 @@ class CurvedCarousel extends React.Component {
   }
   _setPosition() {
     this.setState({
-      containerWidth: React.findDOMNode(this.refs.container).offsetWidth
+      containerWidth: this.container.offsetWidth
     })
   }
   _onSelect(index) {
@@ -54,11 +57,11 @@ class CurvedCarousel extends React.Component {
     let returnChildren = [];
     Array.prototype.slice.call(this.props.children, 0, this.props.children.length).reverse()
       .forEach((child, index) => {
-        children.unshift(React.addons.cloneWithProps(child, { key: 'clone' + (children.length - index) }));
+        children.unshift(React.cloneElement(child, { key: 'clone' + (children.length - index) }));
       });
     Array.prototype.slice.call(this.props.children, 0, this.props.children.length)
       .forEach((child, index) => {
-        children.push(React.addons.cloneWithProps(child, { key: 'clone' + index }));
+        children.push(React.cloneElement(child, { key: 'clone' + index }));
       });
     children.forEach((child, index) => {
       let left = (this.state.left +
@@ -91,7 +94,7 @@ class CurvedCarousel extends React.Component {
         top: top,
         width: this.props.childWidth
       };
-      returnChildren.push(React.addons.cloneWithProps(child, { style: style, key: index, onClick: this._onSelect.bind(this, index) }));
+      returnChildren.push(React.cloneElement(child, { style: style, key: index, onClick: this._onSelect.bind(this, index) }));
     });
 
     this.currentChildren = returnChildren;
@@ -298,11 +301,11 @@ class CurvedCarousel extends React.Component {
 CurvedCarousel.displayName = 'CurvedCarousel';
 
 CurvedCarousel.propTypes = {
-  childWidth: React.PropTypes.number,
-  curve: React.PropTypes.number,
-  spacing: React.PropTypes.number,
-  rotation: React.PropTypes.bool,
-  friction: React.PropTypes.number
+  childWidth: PropTypes.number,
+  curve: PropTypes.number,
+  spacing: PropTypes.number,
+  rotation: PropTypes.bool,
+  friction: PropTypes.number
 };
 
 CurvedCarousel.defaultProps = {
@@ -313,4 +316,4 @@ CurvedCarousel.defaultProps = {
   friction: 0.95
 };
 
-module.exports = CurvedCarousel;
+export default CurvedCarousel;
