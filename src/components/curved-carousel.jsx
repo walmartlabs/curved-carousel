@@ -3,8 +3,6 @@
 
 import React from 'react';
 
-React.initializeTouchEvents(true);
-
 class CurvedCarousel extends React.Component {
   constructor(props) {
     super(props);
