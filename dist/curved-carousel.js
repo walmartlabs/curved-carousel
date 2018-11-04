@@ -85,8 +85,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	_react2['default'].initializeTouchEvents(true);
-	
 	var CurvedCarousel = (function (_React$Component) {
 	  _inherits(CurvedCarousel, _React$Component);
 	
