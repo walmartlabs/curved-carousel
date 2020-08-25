@@ -63,7 +63,7 @@
   "devDependencies": {
     "babel-eslint": "^3.1.25",
     "chai": "^3.2.0",
-    "eslint": "^0.24.1",
+    "eslint": "^7.7.0",
     "eslint-config-defaults": "^3.0.3",
     "eslint-plugin-filenames": "^0.1.1",
     "eslint-plugin-react": "^2.6.4",
