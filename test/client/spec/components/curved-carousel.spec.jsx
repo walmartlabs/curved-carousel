@@ -1,7 +1,7 @@
 /**
  * Client tests
  */
-import React from "react/addons";
+import React from "react";
 import Component from "src/components/curved-carousel";
 
 // Use `TestUtils` to inject into DOM, simulate events, etc.

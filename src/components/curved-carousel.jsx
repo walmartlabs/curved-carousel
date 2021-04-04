@@ -1,10 +1,8 @@
 /* eslint no-unused-lets:0 */
 /*global window, requestAnimationFrame*/
 
-import React from 'react/addons';
-import cloneWithProps from 'react/lib/cloneWithProps';
-
-React.initializeTouchEvents(true);
+import React from 'react';
+import PropTypes from 'prop-types';
 
 class CurvedCarousel extends React.Component {
   constructor(props) {
@@ -30,13 +28,15 @@ class CurvedCarousel extends React.Component {
     window.addEventListener('resize', this._setPosition);
   }
   render() {
+    const { childWidth, curve, spacing, rotation, friction, ...rest } = this.props;
+
     return (
       <div
         className="infinite-scroll"
         {...this._getMouseEvents()}
-        ref="container"
-        {...this.props}>
-        <div style={{position: 'relative', height: '100%', width: '100%', overflow: 'hidden'}}>
+        ref={node => this.container = node}
+        {...rest}>
+        <div style={{ position: 'relative', height: '100%', width: '100%', overflow: 'hidden' }}>
           {this._childrenWithPositions()}
         </div>
       </div>
@@ -44,7 +44,7 @@ class CurvedCarousel extends React.Component {
   }
   _setPosition() {
     this.setState({
-      containerWidth: React.findDOMNode(this.refs.container).offsetWidth
+      containerWidth: this.container.offsetWidth
     })
   }
   _onSelect(index) {
@@ -57,11 +57,11 @@ class CurvedCarousel extends React.Component {
     let returnChildren = [];
     Array.prototype.slice.call(this.props.children, 0, this.props.children.length).reverse()
       .forEach((child, index) => {
-        children.unshift(cloneWithProps(child, {key: 'clone' + (children.length - index)}));
+        children.unshift(React.cloneElement(child, { key: 'clone' + (children.length - index) }));
       });
     Array.prototype.slice.call(this.props.children, 0, this.props.children.length)
       .forEach((child, index) => {
-        children.push(cloneWithProps(child, {key: 'clone' + index}));
+        children.push(React.cloneElement(child, { key: 'clone' + index }));
       });
     children.forEach((child, index) => {
       let left = (this.state.left +
@@ -82,7 +82,7 @@ class CurvedCarousel extends React.Component {
 
       top = top * Math.abs(exp) * ((Math.LN10 / 10));
 
-      if(this.props.rotation === false) {
+      if (this.props.rotation === false) {
         degrees = 0;
       }
 
@@ -94,7 +94,7 @@ class CurvedCarousel extends React.Component {
         top: top,
         width: this.props.childWidth
       };
-      returnChildren.push(cloneWithProps(child, {style: style, key: index, onClick: this._onSelect.bind(this, index)}));
+      returnChildren.push(React.cloneElement(child, { style: style, key: index, onClick: this._onSelect.bind(this, index) }));
     });
 
     this.currentChildren = returnChildren;
@@ -111,14 +111,14 @@ class CurvedCarousel extends React.Component {
     return {
       onMouseDown(e) {
         self.touchObject = {
-            startX: e.pageX,
-            startY: e.pageY,
-            prevX: e.pageX,
-            prevY: e.pageY,
-            endX: e.pageX,
-            endY: e.pageY,
-            previousTime: new Date(),
-            currentTime: new Date()
+          startX: e.pageX,
+          startY: e.pageY,
+          prevX: e.pageX,
+          prevY: e.pageY,
+          endX: e.pageX,
+          endY: e.pageY,
+          previousTime: new Date(),
+          currentTime: new Date()
         };
 
         self.setState({
@@ -147,7 +147,7 @@ class CurvedCarousel extends React.Component {
         }
 
         var length = self.props.vertical ? Math.round(Math.sqrt(Math.pow(e.clientY - self.touchObject.startY, 2)))
-                                         : Math.round(Math.sqrt(Math.pow(e.clientX - self.touchObject.startX, 2)))
+          : Math.round(Math.sqrt(Math.pow(e.clientX - self.touchObject.startX, 2)))
 
         self.touchObject = {
           startX: self.touchObject.startX,
@@ -193,7 +193,7 @@ class CurvedCarousel extends React.Component {
         self.setState({
           dragging: false,
           velocity: velocity
-        }, function() {
+        }, function () {
           self._handleSwipe(e);
         });
 
@@ -215,7 +215,7 @@ class CurvedCarousel extends React.Component {
         self.setState({
           dragging: false,
           velocity: velocity
-        }, function() {
+        }, function () {
           self._handleSwipe(e);
         });
 
@@ -301,11 +301,11 @@ class CurvedCarousel extends React.Component {
 CurvedCarousel.displayName = 'CurvedCarousel';
 
 CurvedCarousel.propTypes = {
-  childWidth: React.PropTypes.number,
-  curve: React.PropTypes.number,
-  spacing: React.PropTypes.number,
-  rotation: React.PropTypes.bool,
-  friction: React.PropTypes.number
+  childWidth: PropTypes.number,
+  curve: PropTypes.number,
+  spacing: PropTypes.number,
+  rotation: PropTypes.bool,
+  friction: PropTypes.number
 };
 
 CurvedCarousel.defaultProps = {
@@ -316,4 +316,4 @@ CurvedCarousel.defaultProps = {
   friction: 0.95
 };
 
-module.exports = CurvedCarousel;
+export default CurvedCarousel;
